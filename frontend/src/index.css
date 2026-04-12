@@ -1,0 +1,203 @@
+/* ============================================================
+   index.css — KISAN AI — Premium Agricultural UI
+   Aesthetic: Organic Luxury — deep forest greens, warm gold,
+   earthy textures, generous space, Devanagari-forward typography
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ── CSS Variables ──────────────────────────────────────────── */
+:root {
+  --green-deep:    #082312;
+  --green-rich:    #0d3b1f;
+  --green-mid:     #155d2e;
+  --green-bright:  #1e9644;
+  --green-light:   #4db86a;
+  --green-pale:    #e6f4eb;
+  --green-glow:    rgba(30,150,68,.18);
+  --gold:          #c9860a;
+  --gold-light:    #f0a824;
+  --gold-bright:   #ffc940;
+  --gold-pale:     #fef7e6;
+  --cream:         #faf8f2;
+  --cream-warm:    #f4efe4;
+  --earth:         #6b4226;
+  --earth-light:   #9c6040;
+  --text-dark:     #0e1a12;
+  --text-mid:      #3a4f3d;
+  --text-light:    #7a9080;
+  --white:         #ffffff;
+  --red:           #b91c1c;
+  --blue:          #1d4ed8;
+  --nav-h:         72px;
+  --radius:        20px;
+  --radius-sm:     12px;
+  --radius-xs:     8px;
+  --shadow-sm:     0 2px 12px rgba(8,35,18,.07);
+  --shadow-md:     0 8px 40px rgba(8,35,18,.12);
+  --shadow-lg:     0 24px 80px rgba(8,35,18,.16);
+  --shadow-gold:   0 8px 32px rgba(201,134,10,.25);
+  --border-soft:   1px solid rgba(30,150,68,.12);
+  --border-cream:  1px solid rgba(8,35,18,.08);
+}
+
+/* ── Reset & Base ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  line-height: 1.65;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+h1,h2,h3,h4,h5 { font-family: 'Playfair Display', serif; line-height: 1.15; color: var(--green-deep); }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; font-family: inherit; }
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--cream-warm); }
+::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 4px; }
+::selection { background: var(--gold-bright); color: var(--green-deep); }
+
+/* ── Animations ─────────────────────────────────────────────── */
+@keyframes slideUp   { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn    { from{opacity:0} to{opacity:1} }
+@keyframes floatY    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+@keyframes sway      { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(4deg)} }
+@keyframes spin      { to{transform:rotate(360deg)} }
+@keyframes shimmer   { 0%{background-position:-400% center} 100%{background-position:400% center} }
+@keyframes pageIn    { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse     { 0%,100%{opacity:1} 50%{opacity:.45} }
+@keyframes scaleIn   { from{transform:scale(.94);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes glowPulse { 0%,100%{box-shadow:0 0 0 0 rgba(30,150,68,.4)} 50%{box-shadow:0 0 0 12px rgba(30,150,68,0)} }
+@keyframes leafSway  { 0%,100%{transform:rotate(-6deg) scale(1)} 50%{transform:rotate(6deg) scale(1.05)} }
+@keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+@keyframes borderGlow { 0%,100%{border-color:rgba(30,150,68,.2)} 50%{border-color:rgba(30,150,68,.5)} }
+
+.page-enter { animation: pageIn .42s cubic-bezier(.22,1,.36,1) both; }
+.slide-up   { animation: slideUp .55s ease both; }
+.scale-in   { animation: scaleIn .4s ease both; }
+
+/* ── Layout ──────────────────────────────────────────────────── */
+.container { max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+.section   { padding: 96px 0; }
+@media(max-width:768px){ .section{padding:64px 0} .container{padding:0 20px} }
+
+/* ── Section labels ──────────────────────────────────────────── */
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--green-bright);
+  background: var(--green-pale); border: 1px solid rgba(30,150,68,.2);
+  padding: 5px 14px; border-radius: 50px; margin-bottom: 18px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px,4vw,48px); font-weight: 900;
+  color: var(--green-deep); line-height: 1.1; margin-bottom: 18px;
+}
+
+.section-sub {
+  font-family: 'Noto Sans Devanagari', 'DM Sans', sans-serif;
+  font-size: 17px; color: var(--text-mid);
+  line-height: 1.8; max-width: 560px;
+}
+
+/* ── Cards ───────────────────────────────────────────────────── */
+.card {
+  background: #fff; border-radius: var(--radius);
+  border: var(--border-cream);
+  box-shadow: var(--shadow-sm);
+  padding: 32px 28px;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(30,150,68,.18);
+}
+
+/* ── Form elements ───────────────────────────────────────────── */
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .8px;
+  text-transform: uppercase; color: var(--text-mid);
+}
+.field input,
+.field select {
+  padding: 14px 18px;
+  border: 2px solid rgba(8,35,18,.1);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-family: 'Noto Sans Devanagari', 'DM Sans', sans-serif;
+  color: var(--text-dark); background: var(--cream);
+  transition: all .2s; outline: none; width: 100%;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--green-bright);
+  box-shadow: 0 0 0 4px rgba(30,150,68,.1);
+  background: #fff;
+}
+.field input::placeholder { color: var(--text-light); }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  padding: 15px 32px;
+  background: linear-gradient(135deg, var(--green-bright), var(--green-mid));
+  color: #fff; border: none; border-radius: 50px;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+  letter-spacing: .3px;
+  transition: all .2s; box-shadow: 0 4px 20px rgba(30,150,68,.3);
+  cursor: pointer;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(30,150,68,.45); }
+
+.btn-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  padding: 15px 32px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--green-deep); border: none; border-radius: 50px;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+  transition: all .2s; box-shadow: var(--shadow-gold);
+  cursor: pointer;
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(201,134,10,.5); }
+
+/* ── Gradient text ───────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-bright));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glass morphism ──────────────────────────────────────────── */
+.glass {
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: var(--radius);
+}
+
+/* ── Print ───────────────────────────────────────────────────── */
+@media print {
+  body { background: #fff !important; }
+  nav, footer, .no-print { display: none !important; }
+  .print-section { break-inside: avoid; }
+}
+
+/* ── Noise texture overlay (adds organic feel) ───────────────── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  opacity: .018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
