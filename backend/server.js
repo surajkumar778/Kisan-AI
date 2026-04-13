@@ -27,12 +27,11 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://localhost:4173',
-    'http://localhost:3000',
+    'https://kisan-ai-nalh.vercel.app',  
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
