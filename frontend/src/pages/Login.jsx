@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 
 const API = 'https://kisan-ai-backend-uphj.onrender.com'
-const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'  // Step 4 mein milega
+const GOOGLE_CLIENT_ID = '1021316997601-a71f2dokn9f56u45e06fbdiqmvvh7f8i.apps.googleusercontent.com'  // Step 4 mein milega
 
 export default function Login() {
   const [tab, setTab]         = useState('login')  // 'login' | 'register'
