@@ -29,6 +29,7 @@ app.use(cors({
     'http://localhost:5173',
     'http://localhost:4173',
     'https://kisan-ai-nalh.vercel.app',
+     'https://kisan-ai-coral.vercel.app',
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
