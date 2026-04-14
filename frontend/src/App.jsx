@@ -1,12 +1,15 @@
 // ============================================================
-//  App.jsx — PREMIUM NAVBAR + FOOTER + ROUTES
+//  App.jsx — PREMIUM NAVBAR + FOOTER + ROUTES + AUTH
 // ============================================================
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, NavLink, Link, useLocation } from 'react-router-dom'
+
 import Home    from './pages/Home.jsx'
 import About   from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import Advisor from './pages/Advisor.jsx'
+import Login   from './pages/Login.jsx'   // ✅ NEW
+
 import VoiceBar from './components/VoiceBar.jsx'
 
 const PATH_PAGE = { '/':'home', '/about':'about', '/contact':'contact', '/advisor':'advisor' }
@@ -24,13 +27,31 @@ function PageWrapper({ children, lang }) {
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [user, setUser] = useState(null) // ✅ NEW
   const { pathname } = useLocation()
 
+  // scroll effect
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 30)
-    window.addEventListener('scroll', fn); return () => window.removeEventListener('scroll', fn)
+    window.addEventListener('scroll', fn); 
+    return () => window.removeEventListener('scroll', fn)
   }, [])
+
+  // close mobile menu on route change
   useEffect(() => setMenuOpen(false), [pathname])
+
+  // ✅ token check
+  useEffect(() => {
+    const token = localStorage.getItem('kisan_token')
+    if (token) setUser(true)
+  }, [])
+
+  // ✅ logout
+  const handleLogout = () => {
+    localStorage.removeItem('kisan_token')
+    setUser(null)
+    window.location.href = '/login'
+  }
 
   const NAV = [
     { to:'/',        label:'होम / Home',    icon:'🏠' },
@@ -64,8 +85,8 @@ function Navbar() {
         fontFamily:"'Playfair Display',serif", fontWeight:900, fontSize:'22px',
         color:'#fff', textDecoration:'none', letterSpacing:'-.5px',
       }}>
-        <span style={{ fontSize:'30px', display:'inline-block', animation:'leafSway 4s ease-in-out infinite' }}>🌾</span>
-        किसान <span style={{ background:'linear-gradient(135deg,#f0a824,#ffc940)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text', marginLeft:'4px' }}>AI</span>
+        <span style={{ fontSize:'30px' }}>🌾</span>
+        किसान <span style={{ background:'linear-gradient(135deg,#f0a824,#ffc940)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', marginLeft:'4px' }}>AI</span>
       </Link>
 
       {/* Desktop nav */}
@@ -75,52 +96,40 @@ function Navbar() {
             <span>{icon}</span>{label}
           </NavLink>
         ))}
+
         <Link to="/advisor" className="btn-gold" style={{ marginLeft:'14px', padding:'10px 24px', fontSize:'13px' }}>
           🤖 AI से सलाह लें
         </Link>
+
+        {/* ✅ Login / Logout */}
+        {user ? (
+          <button onClick={handleLogout} style={{
+            marginLeft:'10px',
+            padding:'8px 16px',
+            borderRadius:'20px',
+            border:'none',
+            background:'#ff4d4f',
+            color:'#fff',
+            cursor:'pointer'
+          }}>
+            Logout
+          </button>
+        ) : (
+          <Link to="/login" style={{
+            marginLeft:'10px',
+            padding:'8px 16px',
+            borderRadius:'20px',
+            background:'#f0a824',
+            color:'#082312',
+            textDecoration:'none'
+          }}>
+            Login
+          </Link>
+        )}
       </nav>
 
-      {/* Mobile burger */}
-      <button onClick={() => setMenuOpen(v=>!v)} className="burger-btn"
-        style={{ marginLeft:'auto', background:'none', border:'1px solid rgba(255,255,255,.2)', borderRadius:'10px', color:'#fff', fontSize:'18px', padding:'8px 12px', display:'none', cursor:'pointer' }}>
-        {menuOpen ? '✕' : '☰'}
-      </button>
-
-      {/* Mobile dropdown */}
-      {menuOpen && (
-        <div style={{
-          position:'absolute', top:'var(--nav-h)', left:0, right:0,
-          background:'rgba(8,35,18,.97)', backdropFilter:'blur(24px)',
-          padding:'16px 20px 24px',
-          display:'flex', flexDirection:'column', gap:'6px',
-          borderBottom:'1px solid rgba(255,255,255,.08)',
-          animation:'slideUp .2s ease both',
-        }}>
-          {NAV.map(({ to, label, icon }) => (
-            <NavLink key={to} to={to} end={to==='/'} style={({ isActive }) => ({
-              padding:'14px 18px', borderRadius:'14px',
-              fontFamily:"'DM Sans',sans-serif", fontSize:'15px', fontWeight:500,
-              color:      isActive ? '#f0a824' : 'rgba(255,255,255,.8)',
-              background: isActive ? 'rgba(240,168,36,.12)' : 'transparent',
-              textDecoration:'none',
-            })}>
-              {icon} {label}
-            </NavLink>
-          ))}
-          <Link to="/advisor" style={{
-            marginTop:'8px', padding:'16px', textAlign:'center',
-            background:'linear-gradient(135deg,#c9860a,#f0a824)',
-            color:'#082312', borderRadius:'14px',
-            fontFamily:"'Playfair Display',serif", fontWeight:700, fontSize:'15px',
-            textDecoration:'none',
-          }}>
-            🤖 AI से फसल सलाह लें
-          </Link>
-        </div>
-      )}
-
       <style>{`
-        @media(max-width:720px){.desktop-nav{display:none!important}.burger-btn{display:block!important}}
+        @media(max-width:720px){.desktop-nav{display:none!important}}
       `}</style>
     </header>
   )
@@ -131,61 +140,16 @@ function Footer() {
     <footer style={{
       background:'linear-gradient(160deg,#082312,#0d3b1f)',
       color:'rgba(255,255,255,.55)', padding:'64px 32px 36px', marginTop:'80px',
+      textAlign:'center'
     }}>
-      <div style={{
-        maxWidth:'1140px', margin:'0 auto',
-        display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',
-        gap:'40px', paddingBottom:'40px', borderBottom:'1px solid rgba(255,255,255,.08)',
-      }}>
-        <div>
-          <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:900, fontSize:'24px', color:'#fff', marginBottom:'14px', display:'flex', alignItems:'center', gap:'10px' }}>
-            🌾 किसान AI
-          </div>
-          <p style={{ fontFamily:"'Noto Sans Devanagari',sans-serif", fontSize:'13px', lineHeight:1.9, maxWidth:'220px' }}>
-            भारतीय किसानों के लिए AI आधारित स्मार्ट कृषि सलाह
-          </p>
-        </div>
-
-        <div>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:700, color:'#fff', marginBottom:'16px', fontSize:'12px', letterSpacing:'1.5px', textTransform:'uppercase' }}>Pages</p>
-          {[['/', '🏠 होम / Home'], ['/about', '🌿 परिचय / About'], ['/contact', '📞 संपर्क / Contact'], ['/advisor', '🤖 AI सलाहकार']].map(([to,label])=>(
-            <Link key={to} to={to} style={{ display:'block', fontSize:'13px', color:'rgba(255,255,255,.5)', marginBottom:'10px', transition:'color .15s', textDecoration:'none' }}
-              onMouseEnter={e=>e.target.style.color='#f0a824'} onMouseLeave={e=>e.target.style.color='rgba(255,255,255,.5)'}>
-              {label}
-            </Link>
-          ))}
-        </div>
-
-        <div>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:700, color:'#fff', marginBottom:'16px', fontSize:'12px', letterSpacing:'1.5px', textTransform:'uppercase' }}>Government Portals</p>
-          {[['pmkisan.gov.in','PM-KISAN'],['pmfby.gov.in','PMFBY Insurance'],['agricoop.gov.in','Agriculture Dept'],['soilhealth.dac.gov.in','Soil Health Card']].map(([href,label])=>(
-            <a key={href} href={`https://${href}`} target="_blank" rel="noopener" style={{ display:'block', fontSize:'13px', color:'rgba(255,255,255,.5)', marginBottom:'10px', textDecoration:'none', transition:'color .15s' }}
-              onMouseEnter={e=>e.target.style.color='#f0a824'} onMouseLeave={e=>e.target.style.color='rgba(255,255,255,.5)'}>
-              {label} ↗
-            </a>
-          ))}
-        </div>
-
-        <div>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:700, color:'#fff', marginBottom:'16px', fontSize:'12px', letterSpacing:'1.5px', textTransform:'uppercase' }}>Contact</p>
-          <p style={{ fontFamily:"'Noto Sans Devanagari',sans-serif", fontSize:'13px', lineHeight:2.2 }}>
-            📧 support@kisanai.in<br/>
-            📞 1800-XXX-XXXX (Toll Free)<br/>
-            🕐 Mon–Sat 9am–6pm IST
-          </p>
-        </div>
-      </div>
-
-      <div style={{ maxWidth:'1140px', margin:'28px auto 0', display:'flex', justifyContent:'space-between', flexWrap:'wrap', gap:'8px', fontSize:'12px' }}>
-        <span>© {new Date().getFullYear()} Kisan AI. Built with ❤️ for Indian Farmers.</span>
-        <span>Powered by Gemini AI + Google TTS + OpenWeatherMap</span>
-      </div>
+      © {new Date().getFullYear()} Kisan AI 🌾
     </footer>
   )
 }
 
 export default function App() {
   const [appLang, setAppLang] = useState('hi')
+
   return (
     <BrowserRouter>
       <Navbar/>
@@ -195,6 +159,7 @@ export default function App() {
           <Route path="/about"   element={<About/>}/>
           <Route path="/contact" element={<Contact/>}/>
           <Route path="/advisor" element={<Advisor onLangChange={setAppLang}/>}/>
+          <Route path="/login"   element={<Login/>}/> {/* ✅ NEW */}
         </Routes>
       </PageWrapper>
       <Footer/>
