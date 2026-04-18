@@ -7,25 +7,35 @@ import { useVoice, PAGE_GREETINGS, hasTTS } from '../hooks/useVoice'
 
 function useCounter(target, duration = 2000) {
   const [val, setVal] = useState(0)
-  const ref = useRef(false)
+  const ref = useRef(null)
+
   useEffect(() => {
-    if (ref.current) return; ref.current = true
-    const step = target / (duration / 16)
-    let cur = 0
-    const id = setInterval(() => {
-      cur = Math.min(cur + step, target)
-      setVal(Math.floor(cur))
-      if (cur >= target) clearInterval(id)
-    }, 16)
-    return () => clearInterval(id)
+    const el = ref.current
+    if (!el) return
+
+    const obs = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return
+      obs.disconnect()
+      const step = target / (duration / 16)
+      let cur = 0
+      const id = setInterval(() => {
+        cur = Math.min(cur + step, target)
+        setVal(Math.floor(cur))
+        if (cur >= target) clearInterval(id)
+      }, 16)
+    }, { threshold: 0.1 })
+
+    obs.observe(el)
+    return () => obs.disconnect()
   }, [target, duration])
-  return val
+
+  return [val, ref]
 }
 
 function StatCard({ icon, value, suffix, label }) {
-  const n = useCounter(value)
+  const [n, ref] = useCounter(value)
   return (
-    <div className="glass" style={{ padding:'28px 20px', textAlign:'center', borderRadius:'20px' }}>
+    <div ref={ref} className="glass" style={{ padding:'28px 20px', textAlign:'center', borderRadius:'20px' }}>
       <div style={{ fontSize:'36px', marginBottom:'12px', animation:'leafSway 4s ease-in-out infinite' }}>{icon}</div>
       <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'clamp(28px,3.5vw,44px)', fontWeight:900, color:'#f0a824', lineHeight:1 }}>
         {n.toLocaleString('en-IN')}{suffix}
