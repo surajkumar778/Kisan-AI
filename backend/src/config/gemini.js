@@ -16,7 +16,7 @@ function getGeminiClient() {
 }
 
 function getModel() {
-  return getGeminiClient().getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+  return getGeminiClient().getGenerativeModel({ model: 'gemini-1.5-flash' }); // ✅ FIXED
 }
 
 module.exports = { getModel };

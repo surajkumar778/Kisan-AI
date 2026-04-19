@@ -37,6 +37,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.set('trust proxy', 1)
 app.use(express.urlencoded({ extended: true }));
 
 // ── MongoDB Connection ───────────────────────────────────────
