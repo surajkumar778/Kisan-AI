@@ -33,7 +33,7 @@ exports.updateLocation = async (req, res) => {
       { new: true }
     )
     if (!farmer) return res.status(404).json({ success: false, message: 'Farmer nahi mila' })
-    res.json({ success: true, data: farmer.location, message: 'Location update ho gaya ✅' })
+    res.json({ success: true, data: farmer.location })
   } catch (err) {
     res.status(400).json({ success: false, message: err.message })
   }
@@ -48,7 +48,7 @@ exports.updateFarm = async (req, res) => {
       { new: true }
     )
     if (!farmer) return res.status(404).json({ success: false, message: 'Farmer nahi mila' })
-    res.json({ success: true, data: farmer.farm, message: 'Farm details save ho gayi ✅' })
+    res.json({ success: true, data: farmer.farm })
   } catch (err) {
     res.status(400).json({ success: false, message: err.message })
   }
