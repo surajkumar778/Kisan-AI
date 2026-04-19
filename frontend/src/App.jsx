@@ -3,12 +3,13 @@
 // ============================================================
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, NavLink, Link, useLocation, Navigate } from 'react-router-dom'
-import Home    from './pages/Home.jsx'
-import About   from './pages/About.jsx'
-import Contact from './pages/Contact.jsx'
-import Advisor from './pages/Advisor.jsx'
-import Login   from './pages/Login.jsx'
-import VoiceBar from './components/VoiceBar.jsx'
+import Home         from './pages/Home.jsx'
+import About        from './pages/About.jsx'
+import Contact      from './pages/Contact.jsx'
+import Advisor      from './pages/Advisor.jsx'
+import Login        from './pages/Login.jsx'
+import ProfileSetup from './pages/ProfileSetup.jsx'   // ✅ NEW
+import VoiceBar     from './components/VoiceBar.jsx'
 
 const PATH_PAGE = { '/':'home', '/about':'about', '/contact':'contact', '/advisor':'advisor' }
 
@@ -38,7 +39,6 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
 
-  // Get logged in user
   const [user, setUser] = useState(null)
   useEffect(() => {
     const u = localStorage.getItem('kisan_user')
@@ -58,8 +58,8 @@ function Navbar() {
   useEffect(() => setMenuOpen(false), [pathname])
 
   const NAV = [
-    { to:'/',        label:'होम / Home',     icon:'🏠' },
-    { to:'/about',   label:'परिचय / About',  icon:'🌿' },
+    { to:'/',        label:'होम / Home',      icon:'🏠' },
+    { to:'/about',   label:'परिचय / About',   icon:'🌿' },
     { to:'/contact', label:'संपर्क / Contact', icon:'📞' },
   ]
 
@@ -107,9 +107,15 @@ function Navbar() {
         {/* User info / Login button */}
         {user ? (
           <div style={{ display:'flex', alignItems:'center', gap:'10px', marginLeft:'12px' }}>
-            <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:'13px', color:'rgba(255,255,255,.8)' }}>
-              👤 {user.name?.split(' ')[0]}
-            </span>
+            {/* ✅ NEW — Profile Setup link */}
+            <Link to="/profile-setup" style={{
+              padding:'8px 16px', borderRadius:'50px',
+              background:'rgba(45,138,80,.2)', border:'1px solid rgba(45,138,80,.35)',
+              color:'#7de8a8', fontFamily:"'DM Sans',sans-serif",
+              fontSize:'12px', fontWeight:600, textDecoration:'none',
+            }}>
+              👨‍🌾 {user.name?.split(' ')[0]}
+            </Link>
             <button onClick={handleLogout} style={{
               padding:'8px 16px', borderRadius:'50px',
               background:'rgba(220,38,38,.2)', border:'1px solid rgba(220,38,38,.4)',
@@ -167,6 +173,20 @@ function Navbar() {
           }}>
             🤖 AI से फसल सलाह लें
           </Link>
+
+          {/* ✅ NEW — Profile link in mobile menu */}
+          {user && (
+            <Link to="/profile-setup" style={{
+              marginTop:'4px', padding:'14px', textAlign:'center',
+              background:'rgba(45,138,80,.15)', border:'1px solid rgba(45,138,80,.3)',
+              color:'#7de8a8', borderRadius:'14px',
+              fontFamily:"'DM Sans',sans-serif", fontWeight:600, fontSize:'14px',
+              textDecoration:'none',
+            }}>
+              👨‍🌾 मेरी Profile — {user.name?.split(' ')[0]}
+            </Link>
+          )}
+
           {user ? (
             <button onClick={handleLogout} style={{
               marginTop:'8px', padding:'14px', textAlign:'center',
@@ -219,7 +239,7 @@ function Footer() {
         </div>
         <div>
           <p style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:700, color:'#fff', marginBottom:'16px', fontSize:'12px', letterSpacing:'1.5px', textTransform:'uppercase' }}>Pages</p>
-          {[['/', '🏠 होम'], ['/about', '🌿 परिचय'], ['/contact', '📞 संपर्क'], ['/advisor', '🤖 AI सलाहकार']].map(([to,label])=>(
+          {[['/', '🏠 होम'], ['/about', '🌿 परिचय'], ['/contact', '📞 संपर्क'], ['/advisor', '🤖 AI सलाहकार'], ['/profile-setup', '👨‍🌾 मेरी Profile']].map(([to,label])=>(
             <Link key={to} to={to} style={{ display:'block', fontSize:'13px', color:'rgba(255,255,255,.5)', marginBottom:'10px', textDecoration:'none', transition:'color .15s' }}
               onMouseEnter={e=>e.target.style.color='#f0a824'} onMouseLeave={e=>e.target.style.color='rgba(255,255,255,.5)'}>
               {label}
@@ -266,10 +286,11 @@ export default function App() {
             <Navbar/>
             <PageWrapper lang={appLang}>
               <Routes>
-                <Route path="/"        element={<ProtectedRoute><Home/></ProtectedRoute>}/>
-                <Route path="/about"   element={<ProtectedRoute><About/></ProtectedRoute>}/>
-                <Route path="/contact" element={<ProtectedRoute><Contact/></ProtectedRoute>}/>
-                <Route path="/advisor" element={<ProtectedRoute><Advisor onLangChange={setAppLang}/></ProtectedRoute>}/>
+                <Route path="/"              element={<ProtectedRoute><Home/></ProtectedRoute>}/>
+                <Route path="/about"         element={<ProtectedRoute><About/></ProtectedRoute>}/>
+                <Route path="/contact"       element={<ProtectedRoute><Contact/></ProtectedRoute>}/>
+                <Route path="/advisor"       element={<ProtectedRoute><Advisor onLangChange={setAppLang}/></ProtectedRoute>}/>
+                <Route path="/profile-setup" element={<ProtectedRoute><ProfileSetup/></ProtectedRoute>}/>  {/* ✅ NEW */}
               </Routes>
             </PageWrapper>
             <Footer/>
