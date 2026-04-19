@@ -16,7 +16,10 @@ function getGeminiClient() {
 }
 
 function getModel() {
-  return getGeminiClient().getGenerativeModel({ model: 'gemini-1.5-flash-latest' }); // ✅ FIXED
+  return getGeminiClient().getGenerativeModel(
+    { model: 'gemini-1.5-flash' },
+    { apiVersion: 'v1beta' }        // ✅ v1beta — free API keys ke liye
+  );
 }
 
 module.exports = { getModel };
