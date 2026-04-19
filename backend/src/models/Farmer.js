@@ -1,8 +1,11 @@
+// ============================================================
+//  src/models/Farmer.js
+// ============================================================
 const mongoose = require('mongoose')
 
 const LocationSchema = new mongoose.Schema({
-  state:    { type: String, required: true },
-  district: { type: String, required: true },
+  state:    { type: String },
+  district: { type: String },
   city:     { type: String },
   pincode:  { type: String },
   lat:      { type: Number },
@@ -25,25 +28,21 @@ const AdvisorySchema = new mongoose.Schema({
   recommendedCrops: [{ type: String }],
   mandiPrice:       { type: mongoose.Schema.Types.Mixed },
   weatherData:      { type: mongoose.Schema.Types.Mixed },
-}, { _id: true })
+})
 
 const FarmerSchema = new mongoose.Schema({
-  googleId:        { type: String, unique: true, sparse: true },
-  name:            { type: String, required: true },
-  email:           { type: String, required: true, unique: true, lowercase: true },
-  avatar:          { type: String },
+  userId:          { type: String, required: true, unique: true }, // MongoDB _id from User
+  name:            { type: String },
+  email:           { type: String, lowercase: true },
   phone:           { type: String },
   location:        { type: LocationSchema },
   farm:            { type: FarmSchema },
   advisoryHistory: { type: [AdvisorySchema], default: [] },
   language:        { type: String, enum: ['hi','en'], default: 'hi' },
-  notifications:   { type: Boolean, default: true },
-  isActive:        { type: Boolean, default: true },
   lastLogin:       { type: Date },
 }, { timestamps: true })
 
+FarmerSchema.index({ userId: 1 })
 FarmerSchema.index({ 'location.state': 1, 'location.district': 1 })
-FarmerSchema.index({ email: 1 })
-FarmerSchema.index({ googleId: 1 })
 
 module.exports = mongoose.model('Farmer', FarmerSchema)
